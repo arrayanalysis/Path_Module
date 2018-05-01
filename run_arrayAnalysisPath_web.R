@@ -58,6 +58,18 @@ print("Importing Data ....")
 pgex <- xml.rpc(host,"PathVisio.importData", inputFile, idcolNum, sysCode, syscolNum, "", gdbFile, getwd())
 print (paste(pgex,"file created!",sep=""))	
 
+##Check if rExpr is set 
+#If not set rColor to ""
+if(rExpr==""){
+  rColor=""
+}
+##Check if gColorset is set
+#If not set gColor and gValue to ""
+if(gColorSet==""){
+  gColor=""
+  gValue=""
+}
+
 ##pgex returns the address of the pgex file
 ## Create Visualization
 print("Creating visualisation...")
