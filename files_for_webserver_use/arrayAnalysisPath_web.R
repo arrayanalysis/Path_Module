@@ -2,7 +2,7 @@
 # ArrayAnalysis - ArrayAnalysisPath                                           #
 # a tool for visualisation of expression set on a pathways                    #
 #                                                                             #
-# Copyright 2010-2013 BiGCaT Bioinformatics                                   #
+# Copyright 2010-2011 BiGCaT Bioinformatics                                   #
 #                                                                             #
 # Licensed under the Apache License, Version 2.0 (the "License");             #
 # you may not use this file except in compliance with the License.            #
@@ -18,44 +18,81 @@
 #=============================================================================#
 
 ###############################################################################
-# Set directories and server address
+# Get input parameters                          		              #
 ###############################################################################
 
-#SCRIPT.DIR <- paste(getwd(),"",sep="/")
-#PATHWAY.DIR <- "/home/x_array/arrayanalysis.dev/arrayanalysis/pathways/"
-#PATHWAY.DIR <- paste(getwd(),"test/pathways/",sep="/")
-PATHWAY.DIR <- "/home/anwesha/PathVisio-Data/mouse-pathways"
-#WORK.DIR <- paste(getwd(),"",sep="/")
+arrayAnalysisPath<-function(...) {
 
+# GenePattern command line of this type: 
+#          <R2.5> <libdir>myscript.R myfunction -i<input.file> 
+# Input parameters formatted for GenePattern and arrayanalysis.org
+# Default values managed by GP and web input forms
+  
+	args <- list(...)
+	for(i in 1:length(args)) {
+		flag <- substring(args[[i]], 0, 2)
+		value <- substring(args[[i]], 3, nchar(args[[i]]))
+		if(flag=='-r'){
+			refName = value
+		}			
+		if(flag=='-i'){
+			inputFile = value
+		}
+		if(flag=='-D'){
+			idcolName = value
+		}	
+		if(flag=='-y'){
+			sysCode = value
+		}
+		if(flag=='-a'){
+			syscolName = value		
+		}
+		if(flag=='-s'){
+			species = value
+		}	
+		if(flag=='-w'){
+			wpCol = value
+		}	
+		if(flag=='-g'){
+			gdbFile = value
+		}	
+		if(flag=='-G'){
+			gColorSet = value
+		}			
+		if(flag=='-c'){
+			gColor = value
+		}
+		if(flag=='-v'){
+			gValue = value
+		}
+		if(flag=='-R'){
+			rColorSet = value
+		}
+		if(flag=='-C'){
+			rColor = value
+		}
+		if(flag=='-e'){
+			rExpr = value
+		}
+		if(flag=='-Z'){
+			exprZ = value
+		}
+	}
+  
 ###############################################################################
-# Set input parameters                          				             
+# Run functions 		                          				              
 ###############################################################################
 
-inputFile <- "/home/anwesha/PathVisio-Data/arrayanalysistest/data.txt"
-#inputFile <- "/home/x_array/arrayanalysis.dev/arrayanalysis/temp/example_set1_2011-08-22_13-54_44_Stat/control_24h-treated_24h.txt"
-#inputFile <- paste(getwd(),"myTest.txt",sep="/")
-#dbFile <- paste(getwd(),"Hs_Derby_2010601.bridge",sep="/")
-dbDir <- "/home/anwesha/PathVisio-Data/gene-databases"
-#species<-"HomoSapiens"
-resultDir <- "/home/anwesha/PathVisio-Data/arrayanalysistest"
-
-
-gSample <- "log2FC"
-gColor <- "blue,white,red" 
-gValue <- "-2,0,2"
-rSample <- "pvalue"
-rColor <- "green"
-rExpr <- "[pvalue]<0.05"
-zExpr <- "[pvalue]<0.05"
-
-source(paste(SCRIPT.DIR,"run_arrayAnalysisPath.R",sep=""),local=TRUE)
+  source("setParametersPath_web.R",local=TRUE)
+  source("processFilePath_web.R",local=TRUE)
+  source("run_arrayAnalysisPath_web.R",local=TRUE)
 
 # DESCRIPTION : 
 # inputFile <- name of the file containing statistical comparison table 
 #				[give full path if the file is not present in your WORK.DIR]
-# dbFile 	<- database file name (.bridgedb file corresponding to your species) 
+# gdbFile 	<- database file name (.bridgedb file corresponding to your species) 
 #				[give full path if the file is not present in your WORK.DIR]
-# gSample <- string representing a list of unique sample names (file headers), 
+# gColorSet <- string representing a list of unique sample names (file headers), 
 #				on which a gradient is applied. Sample names are separated by ";" 
 #				Attribute NULL value if no gradient is required
 # gColor 	<- string representing a list of list of colors: 2 to 3 colors are 
@@ -64,9 +101,8 @@ source(paste(SCRIPT.DIR,"run_arrayAnalysisPath.R",sep=""),local=TRUE)
 #				"," splits the colors for each given gradient.
 # gValue 	<- string representing a list of list of values corresponding to 
 #				gColor and is organized the same way.
-# rSample <- string representing a list of unique ids (headers no present in 
-#				gColorSet or any string). These color sets may contain one or 
-#				several color rules. The color set separator is ";". 
+# rColorSet <- string representing a list of unique ids. These color sets may 
+#				contain one or several color rules. The color set separator is ";". 
 #				Attribute NULL value if no color rule is required
 # rColor 	<- rColor is a string representing a list of list of colors: for 
 #				each rule, only one color is set but many rules may be defined 
@@ -75,4 +111,5 @@ source(paste(SCRIPT.DIR,"run_arrayAnalysisPath.R",sep=""),local=TRUE)
 #				the colors for each given rule.
 # rExpr		<- string representing a list of list of boolean expression 
 #				corresponding to rColor and is organized the same way. 
-# zExpr 	<- boolean expression for zscore calculation
+# exprZ 	<- boolean expression for zscore calculation
+}
